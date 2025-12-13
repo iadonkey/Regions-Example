@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="HandlingContainer" Id="{7a141220-f647-435c-a8c1-4742a8d4c21f}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK HandlingContainer EXTENDS ZCore.ObjectContainer
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+  {attribute 'hide'}
+  _parent : REFERENCE TO HandlingUnit;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="FB_init" Id="{2e7ac3d5-9421-41c5-a053-45eb873ac06c}">
+      <Declaration><![CDATA[{attribute 'hide' }
+METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+  unit : REFERENCE TO HandlingUnit;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_parent REF= unit;]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

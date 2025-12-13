@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <Itf Name="IHandling" Id="{f2a4b17f-26f2-4bad-91fb-18d923adeba3}">
+    <Declaration><![CDATA[INTERFACE IHandling EXTENDS ZApplication.IUnit
+]]></Declaration>
+  </Itf>
+</TcPlcObject>

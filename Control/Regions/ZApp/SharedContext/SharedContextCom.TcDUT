@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <DUT Name="SharedContextCom" Id="{3482cefa-34e6-4ed4-ad10-8cc96dfa7a43}">
+    <Declaration><![CDATA[TYPE SharedContextCom :
+STRUCT
+  Publish : SharedContextComPublish;
+  Subscribe : SharedContextComSubscribe;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="SharedContextContainer" Id="{ba87ad56-729e-424f-840d-d1d6dc971b67}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK SharedContextContainer EXTENDS ZCore.ObjectContainer
+VAR_INPUT
+  Region1 : ZApplication.Region('Region-1', priority:=1);
+  Region2 : ZApplication.Region('Region-2', priority:=2);
+  Region3 : ZApplication.Region('Region-3', priority:=3);  
+END_VAR
+VAR
+  {attribute 'hide'}
+  _regionbridge : ZApplication.RegionBridge(0);  
+  _logger : ZCore.ILogger;
+  _com : REFERENCE TO SharedContextCom;  
+  v1, v2 : ZCore.Vector4;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF _isInitialized
+THEN
+  RETURN;
+END_IF
+
+v1.Y := -25;
+v2.Y := 25;
+
+v1.X := 100;
+v2.X := 150;
+Region1.SetBoundingBox(v1, v2);
+Region1.SetLogger(_logger);
+_regionbridge.AddStaticRegion(Region1, _com.Publish.Region1, _com.Subscribe.Region1);
+
+v1.X := 250;
+v2.X := 300;
+Region2.SetBoundingBox(v1, v2);
+Region2.SetLogger(_logger);
+_regionbridge.AddStaticRegion(Region2, _com.Publish.Region2, _com.Subscribe.Region2);
+
+v1.X := 305;
+v2.X := 355;
+Region3.SetBoundingBox(v1, v2);
+Region3.SetLogger(_logger);
+_regionbridge.AddStaticRegion(Region3, _com.Publish.Region3, _com.Subscribe.Region3);
+
+_isInitialized := TRUE;]]></ST>
+    </Implementation>
+    <Method Name="Fb_init" Id="{e18d7426-f49e-4c69-b9e4-bf1c34f85929}">
+      <Declaration><![CDATA[//FB_Init is always available implicitly and it is used primarily for initialization.
+//The return value is not evaluated. For a specific influence, you can also declare the
+//methods explicitly and provide additional code there with the standard initialization
+//code. You can evaluate the return value.
+METHOD FB_Init: BOOL
+VAR_INPUT
+  bInitRetains: BOOL; // TRUE: the retain variables are initialized (reset warm / reset cold)
+  bInCopyCode: BOOL;  // TRUE: the instance will be copied to the copy code afterward (online change)
+  parent : ZCore.IManagedObject;
+  com : REFERENCE TO SharedContextCom;
+  logger : ZCore.ILogger;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_logger := logger;
+_com REF= com;
+_regionbridge.FB_init(bInitRetains, bInCopyCode, parent);]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

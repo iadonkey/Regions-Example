@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <DUT Name="SharedContextComSubscribe" Id="{f0bb825e-8446-4e84-a3a0-4f05acc1e4f0}">
+    <Declaration><![CDATA[TYPE SharedContextComSubscribe :
+STRUCT
+  Region1 : ZApplication.RegionComSubscribe;
+  Region2 : ZApplication.RegionComSubscribe;
+  Region3 : ZApplication.RegionComSubscribe;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

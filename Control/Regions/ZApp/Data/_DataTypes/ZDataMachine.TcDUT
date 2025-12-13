@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <DUT Name="ZDataMachine" Id="{c4bd328f-72a7-4620-abb9-b8ce0556742c}">
+    <Declaration><![CDATA[TYPE ZDataMachine :
+STRUCT
+{region "Handling1"}
+{IF NOT (defined (Handling1_disabled))}
+  Handling1 : HandlingDataMachine;
+  {attribute 'ZId' := 'daa053b3-ae33-4567-9b11-72e6fc346262'}
+{END_IF}
+{endregion}
+{region "Handling2"}
+{IF NOT (defined (Handling2_disabled))}
+  Handling2 : HandlingDataMachine;
+  {attribute 'ZId' := '686d4019-fd8f-49d1-bfb7-e2c5e589b8a3'}
+{END_IF}
+{endregion}
+{attribute '__ZwPlcApplicationDataMachineDeclaration__'} // Do not remove this attribute! It is used for code generation.
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

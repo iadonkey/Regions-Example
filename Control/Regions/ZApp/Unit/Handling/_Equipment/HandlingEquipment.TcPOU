@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="HandlingEquipment" Id="{0ad34e89-c90f-4dc4-994d-b2a51af3d6ea}" SpecialFunc="None">
+    <Declaration><![CDATA[/// This function block is a container for equipment that is used by this unit.
+/// Equipment is grouped by its kind (actuator, axes, io, ...).
+/// It extends from [ManagedObjectContainer](xref:ZCore.ManagedObjectContainer) such that the parent
+/// (= the unit itself) can be passed to equipment instances.
+FUNCTION_BLOCK HandlingEquipment EXTENDS HandlingContainer
+VAR_INPUT
+  Io : HandlingIo(_parent);
+  Actuator : HandlingActuator(_parent);
+  Axis : HandlingAxis(_parent);
+  Fieldbus : HandlingFieldbus(_parent);
+  Unit : HandlingLinkedUnit(_parent);
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

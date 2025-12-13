@@ -1,0 +1,324 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <FileVersion>1.0.0.0</FileVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{a155de0e-b04c-49d7-a15d-ca32d54f485e}</ProjectGuid>
+    <SubObjectsSortedByName>True</SubObjectsSortedByName>
+    <DownloadApplicationInfo>true</DownloadApplicationInfo>
+    <WriteProductVersion>false</WriteProductVersion>
+    <GenerateTpy>false</GenerateTpy>
+    <Name>Regions</Name>
+    <ProgramVersion>3.1.4026.18</ProgramVersion>
+    <Application>{87cce83e-998e-4502-bbb5-039e402cda66}</Application>
+    <TypeSystem>{8e7ba898-4eb7-4e58-a9cb-8ba2b43c7ea7}</TypeSystem>
+    <Implicit_Task_Info>{747346f5-0e1a-45c5-9690-80d50e45f6b9}</Implicit_Task_Info>
+    <Implicit_KindOfTask>{d9dff3e2-fc7f-4aee-9f35-5517bf04669b}</Implicit_KindOfTask>
+    <Implicit_Jitter_Distribution>{747d6e43-b1e4-48f6-8a6e-6f6c6f0f2f10}</Implicit_Jitter_Distribution>
+    <LibraryReferences>{47c5e5af-cd09-4b33-a311-a9440f191b61}</LibraryReferences>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="ZApp\App\ZApp.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ZApp\App\_DataTypes\ZAppStep.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ZApp\App\_States\ZAppSequenceBoot.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ZApp\App\_States\ZAppSequenceBootFault.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ZApp\App\_States\ZAppSequenceRunning.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ZApp\App\_SubObjects\ZAppSequence.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ZApp\Com\_DataTypes\ZCom.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ZApp\Com\_DataTypes\ZComUnit.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ZApp\Data\_DataTypes\ZData.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ZApp\Data\_DataTypes\ZDataMachine.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ZApp\Data\_DataTypes\ZDataConfig.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ZApp\Data\_DataTypes\ZDataCalibration.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ZApp\Data\_DataTypes\ZDataRecipe.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ZApp\SharedContext\SharedContextCom.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ZApp\SharedContext\SharedContextComPublish.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ZApp\SharedContext\SharedContextComSubscribe.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ZApp\SharedContext\SharedContextContainer.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ZApp\Unit\Handling\HandlingUnit.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ZApp\Unit\Handling\HandlingUnitProgram.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ZApp\Unit\Handling\IHandling.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ZApp\Unit\Handling\_Com\HandlingCom.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ZApp\Unit\Handling\_Com\HandlingComPublish.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ZApp\Unit\Handling\_Com\HandlingComPublishEquipment.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ZApp\Unit\Handling\_Com\HandlingComRef.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ZApp\Unit\Handling\_Com\HandlingComRequest.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ZApp\Unit\Handling\_Com\HandlingComSubscribe.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ZApp\Unit\Handling\_Com\HandlingComSubscribeEquipment.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ZApp\Unit\Handling\_DataTypes\HandlingState.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ZApp\Unit\Handling\_DataTypes\HandlingStep.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ZApp\Unit\Handling\_Data\HandlingDataCalibration.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ZApp\Unit\Handling\_Data\HandlingDataConfig.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ZApp\Unit\Handling\_Data\HandlingDataMachine.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ZApp\Unit\Handling\_Data\HandlingDataRef.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ZApp\Unit\Handling\_Equipment\HandlingActuator.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ZApp\Unit\Handling\_Equipment\HandlingAxis.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ZApp\Unit\Handling\_Equipment\HandlingEquipment.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ZApp\Unit\Handling\_Equipment\HandlingFieldbus.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ZApp\Unit\Handling\_Equipment\HandlingIo.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ZApp\Unit\Handling\_Equipment\HandlingLinkedUnit.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ZApp\Unit\Handling\_States\HandlingSequenceAutomatic.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ZApp\Unit\Handling\_States\HandlingSequenceBoot.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ZApp\Unit\Handling\_States\HandlingSequenceFaultReaction.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ZApp\Unit\Handling\_States\HandlingSequenceGoHome.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ZApp\Unit\Handling\_States\HandlingSequenceStop.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ZApp\Unit\Handling\_SubObjects\HandlingContainer.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ZApp\Unit\Handling\_SubObjects\HandlingSequence.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ZApp\ZGlobal.TcGVL">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="ZApp\ZModuleProgram.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ZApp\ZModuleTask.TcTTO">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ZApp\App" />
+    <Folder Include="ZApp\App\_DataTypes" />
+    <Folder Include="ZApp\App\_States" />
+    <Folder Include="ZApp\App\_SubObjects" />
+    <Folder Include="ZApp\Com" />
+    <Folder Include="ZApp\Com\_DataTypes" />
+    <Folder Include="ZApp\Data" />
+    <Folder Include="ZApp\Data\_DataTypes" />
+    <Folder Include="ZApp" />
+    <Folder Include="ZApp\SharedContext" />
+    <Folder Include="ZApp\Unit" />
+    <Folder Include="ZApp\Unit\Handling" />
+    <Folder Include="ZApp\Unit\Handling\_Com" />
+    <Folder Include="ZApp\Unit\Handling\_Data" />
+    <Folder Include="ZApp\Unit\Handling\_DataTypes" />
+    <Folder Include="ZApp\Unit\Handling\_Equipment" />
+    <Folder Include="ZApp\Unit\Handling\_States" />
+    <Folder Include="ZApp\Unit\Handling\_SubObjects" />
+  </ItemGroup>
+  <ItemGroup>
+    <PlaceholderReference Include="Tc3_Module">
+      <DefaultResolution>Tc3_Module, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc3_Module</Namespace>
+    </PlaceholderReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PlaceholderReference Include="ZApplication">
+      <DefaultResolution>ZApplication, 1.5.37.1 (Zeugwerk GmbH)</DefaultResolution>
+      <Namespace>ZApplication</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="ZAux">
+      <DefaultResolution>ZAux, 1.5.37.1 (Zeugwerk GmbH)</DefaultResolution>
+      <Namespace>ZAux</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="ZCore">
+      <DefaultResolution>ZCore, 1.5.37.1 (Zeugwerk GmbH)</DefaultResolution>
+      <Namespace>ZCore</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="ZEquipment">
+      <DefaultResolution>ZEquipment, 1.5.37.1 (Zeugwerk GmbH)</DefaultResolution>
+      <Namespace>ZEquipment</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="ZPlatform">
+      <DefaultResolution>ZPlatform, 1.5.37.1 (Zeugwerk GmbH)</DefaultResolution>
+      <Namespace>ZPlatform</Namespace>
+    </PlaceholderReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PlaceholderResolution Include="ZApplication">
+      <Resolution>ZApplication, 1.7.22.1 (Zeugwerk GmbH)</Resolution>
+    </PlaceholderResolution>
+    <PlaceholderResolution Include="ZAux">
+      <Resolution>ZAux, 1.7.22.1 (Zeugwerk GmbH)</Resolution>
+    </PlaceholderResolution>
+    <PlaceholderResolution Include="ZCore">
+      <Resolution>ZCore, 1.7.22.1 (Zeugwerk GmbH)</Resolution>
+    </PlaceholderResolution>
+    <PlaceholderResolution Include="ZEquipment">
+      <Resolution>ZEquipment, 1.7.22.1 (Zeugwerk GmbH)</Resolution>
+    </PlaceholderResolution>
+    <PlaceholderResolution Include="ZPlatform">
+      <Resolution>ZPlatform, 1.7.22.1 (Zeugwerk GmbH)</Resolution>
+    </PlaceholderResolution>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Regions.tmc">
+      <SubType>Content</SubType>
+    </None>
+  </ItemGroup>
+  <ProjectExtensions>
+    <PlcProjectOptions>
+      <XmlArchive>
+        <Data>
+          <o xml:space="preserve" t="OptionKey">
+      <v n="Name">"&lt;ProjectRoot&gt;"</v>
+      <d n="SubKeys" t="Hashtable" ckt="String" cvt="OptionKey">
+        <v>{192FAD59-8248-4824-A8DE-9177C94C195A}</v>
+        <o>
+          <v n="Name">"{192FAD59-8248-4824-A8DE-9177C94C195A}"</v>
+          <d n="SubKeys" t="Hashtable" />
+          <d n="Values" t="Hashtable" />
+        </o>
+        <v>{246001F4-279D-43AC-B241-948EB31120E1}</v>
+        <o>
+          <v n="Name">"{246001F4-279D-43AC-B241-948EB31120E1}"</v>
+          <d n="SubKeys" t="Hashtable" />
+          <d n="Values" t="Hashtable" />
+        </o>
+        <v>{29BD8D0C-3586-4548-BB48-497B9A01693F}</v>
+        <o>
+          <v n="Name">"{29BD8D0C-3586-4548-BB48-497B9A01693F}"</v>
+          <d n="SubKeys" t="Hashtable" ckt="String" cvt="OptionKey">
+            <v>NamingConventions</v>
+            <o>
+              <v n="Name">"NamingConventions"</v>
+              <d n="SubKeys" t="Hashtable" />
+              <d n="Values" t="Hashtable" />
+            </o>
+            <v>Rules</v>
+            <o>
+              <v n="Name">"Rules"</v>
+              <d n="SubKeys" t="Hashtable" />
+              <d n="Values" t="Hashtable" />
+            </o>
+          </d>
+          <d n="Values" t="Hashtable" />
+        </o>
+        <v>{40450F57-0AA3-4216-96F3-5444ECB29763}</v>
+        <o>
+          <v n="Name">"{40450F57-0AA3-4216-96F3-5444ECB29763}"</v>
+          <d n="SubKeys" t="Hashtable" />
+          <d n="Values" t="Hashtable" />
+        </o>
+        <v>{8A0FB252-96EB-4DCC-A5B4-B4804D05E2D6}</v>
+        <o>
+          <v n="Name">"{8A0FB252-96EB-4DCC-A5B4-B4804D05E2D6}"</v>
+          <d n="SubKeys" t="Hashtable" />
+          <d n="Values" t="Hashtable" ckt="String" cvt="Boolean">
+            <v>WriteLineIDs</v>
+            <v>False</v>
+          </d>
+        </o>
+        <v>{8F99A816-E488-41E4-9FA3-846536012284}</v>
+        <o>
+          <v n="Name">"{8F99A816-E488-41E4-9FA3-846536012284}"</v>
+          <d n="SubKeys" t="Hashtable" />
+          <d n="Values" t="Hashtable" ckt="String" cvt="String">
+            <v>DisabledWarningIds</v>
+            <v>5410</v>
+          </d>
+        </o>
+        <v>{F66C7017-BDD8-4114-926C-81D6D687E35F}</v>
+        <o>
+          <v n="Name">"{F66C7017-BDD8-4114-926C-81D6D687E35F}"</v>
+          <d n="SubKeys" t="Hashtable" />
+          <d n="Values" t="Hashtable" ckt="String" cvt="Boolean">
+            <v>CalcActiveTransOnly</v>
+            <v>True</v>
+          </d>
+        </o>
+      </d>
+      <d n="Values" t="Hashtable" />
+    </o>
+        </Data>
+        <TypeList>
+          <Type n="Boolean">System.Boolean</Type>
+          <Type n="Hashtable">System.Collections.Hashtable</Type>
+          <Type n="OptionKey">{54dd0eac-a6d8-46f2-8c27-2f43c7e49861}</Type>
+          <Type n="String">System.String</Type>
+        </TypeList>
+      </XmlArchive>
+    </PlcProjectOptions>
+  </ProjectExtensions>
+</Project>

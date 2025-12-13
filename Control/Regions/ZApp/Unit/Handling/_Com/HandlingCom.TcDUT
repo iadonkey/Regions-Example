@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <DUT Name="HandlingCom" Id="{bd65d8ef-554a-421f-97f4-1b3c884bed0b}">
+    <Declaration><![CDATA[/// This struct contains variables that
+/// * are read from outside (e.g. HMI) to retrieve information about the unit's current state and (temporary) parameters (= `publish`) 
+/// * are written from outside (e.g. HMI) to control the unit via ADS (= `subscribe`) 
+TYPE HandlingCom :
+STRUCT
+  Publish : HandlingComPublish;
+  Subscribe : HandlingComSubscribe;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

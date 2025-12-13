@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <DUT Name="HandlingComRef" Id="{998481fb-99d7-41ba-92eb-29469252cea4}">
+    <Declaration><![CDATA[/// container for all communication data types that are used by the unit
+TYPE HandlingComRef :
+STRUCT
+  Publish : REFERENCE TO HandlingComPublish; 
+  Subscribe : REFERENCE TO HandlingComSubscribe; 
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

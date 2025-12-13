@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <DUT Name="ZDataCalibration" Id="{77e12acc-57b3-4a16-8919-c0967859bf11}">
+    <Declaration><![CDATA[TYPE ZDataCalibration :
+STRUCT
+{region "Handling1"}
+{IF NOT (defined (Handling1_disabled))}
+  Handling1 : HandlingDataCalibration;
+  {attribute 'ZId' := 'daa053b3-ae33-4567-9b11-72e6fc346262'}
+{END_IF}
+{endregion}
+{region "Handling2"}
+{IF NOT (defined (Handling2_disabled))}
+  Handling2 : HandlingDataCalibration;
+  {attribute 'ZId' := '686d4019-fd8f-49d1-bfb7-e2c5e589b8a3'}
+{END_IF}
+{endregion}
+{attribute '__ZwPlcApplicationDataCalibrationDeclaration__'} // Do not remove this attribute! It is used for code generation.
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

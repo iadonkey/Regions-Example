@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="HandlingUnitProgram" Id="{4e743c67-be05-42b0-8cc3-be541158d846}" SpecialFunc="None">
+    <Declaration><![CDATA[/// each unit can run in its own PROGRAM and Task, respectively. However, this is optional and one may also
+/// instantiate the unit in the ModuleProgram.
+/// In order to keep initialization to a minimum, all ModuleContext objects that are required by the Unit are
+/// given as FB_init parameter. These objects are
+/// * data structs
+/// * communication structs
+/// * busmaster(s)
+/// A unit should always be a root object (no parent) if it is running in its own context. If it runs in the same
+/// task as the Module the parent may be set to the Module's Application.
+PROGRAM HandlingUnitProgram
+VAR
+{region "Handling1"}
+{undefine RunInSeparateProgram}
+{IF NOT (defined (Handling1_disabled)) AND (defined (RunInSeparateProgram))}
+  Handling1 : HandlingUnit(displayName := 'Handling1', // name of the unit (for logging)
+    parent:= 0,
+    configdata := ZGlobal.Data.Config.Handling1,
+    machinedata := ZGlobal.Data.Machine.Handling1,
+    calibrationdata := ZGlobal.Data.Calibration.Handling1,
+    com := ZGlobal.Com.Unit.Handling1,
+    logger := Logger,
+    alarming:= Alarming);
+  {attribute 'section' := '__ZwPlcUnitProgramDeclaration__'}
+  {attribute 'ZId' := 'daa053b3-ae33-4567-9b11-72e6fc346262'}
+{END_IF}
+{endregion}
+{region "Handling2"}
+{undefine RunInSeparateProgram}
+{IF NOT (defined (Handling2_disabled)) AND (defined (RunInSeparateProgram))}
+  Handling2 : HandlingUnit(displayName := 'Handling2', // name of the unit (for logging)
+    parent:= 0,
+    configdata := ZGlobal.Data.Config.Handling2,
+    machinedata := ZGlobal.Data.Machine.Handling2,
+    calibrationdata := ZGlobal.Data.Calibration.Handling2,
+    com := ZGlobal.Com.Unit.Handling2,
+    logger := Logger,
+    alarming:= Alarming);
+  {attribute 'section' := '__ZwPlcUnitProgramDeclaration__'}
+  {attribute 'ZId' := '686d4019-fd8f-49d1-bfb7-e2c5e589b8a3'}
+{END_IF}
+{endregion}
+{attribute '__ZwPlcUnitProgramDeclaration__'} // Do not remove this attribute! It is used for code generation.
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// run the unit - the cylics of all children will be called as well
+
+{region "Handling1"}
+{undefine RunInSeparateProgram}
+{IF NOT (defined (Handling1_disabled)) AND (defined (RunInSeparateProgram))}
+  Handling1.Cyclic();
+  {attribute 'section' := '__ZwPlcUnitProgramImplementation__'}
+  {attribute 'ZId' := 'daa053b3-ae33-4567-9b11-72e6fc346262'}
+{END_IF}
+{endregion}
+{region "Handling2"}
+{undefine RunInSeparateProgram}
+{IF NOT (defined (Handling2_disabled)) AND (defined (RunInSeparateProgram))}
+  Handling2.Cyclic();
+  {attribute 'section' := '__ZwPlcUnitProgramImplementation__'}
+  {attribute 'ZId' := '686d4019-fd8f-49d1-bfb7-e2c5e589b8a3'}
+{END_IF}
+{endregion}
+{attribute '__ZwPlcUnitProgramImplementation__'} // Do not remove this attribute! It is used for code generation.
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

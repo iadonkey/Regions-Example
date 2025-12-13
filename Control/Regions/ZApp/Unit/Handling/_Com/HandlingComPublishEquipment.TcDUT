@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <DUT Name="HandlingComPublishEquipment" Id="{b5abaae4-fec9-4eaf-9bfa-1b9e6a07ecda}">
+    <Declaration><![CDATA[TYPE HandlingComPublishEquipment :
+STRUCT
+
+{region "AxisX : Axis"}
+  AxisX : ZApplication.AxisComPublish;
+  {attribute 'ZId' := '948ae39b-c3c7-40c3-a820-f277405d18e6'}
+{endregion}
+
+{attribute '__ZwPlcUnitComDeclaration__'} // Do not remove this attribute! It is used for code generation.
+
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>
