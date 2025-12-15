@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <Itf Name="IPathQuery3" Id="{4a888ebc-659c-45c3-a9f4-41422609cae5}">
+    <Declaration><![CDATA[INTERFACE IPathQuery3
+]]></Declaration>
+    <Method Name="ReserveAsync" Id="{b4ac4429-c892-41f9-a83b-a581dc75caad}">
+      <Declaration><![CDATA[METHOD ReserveAsync
+VAR_INPUT
+  unit : REFERENCE TO Unit;
+END_VAR]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

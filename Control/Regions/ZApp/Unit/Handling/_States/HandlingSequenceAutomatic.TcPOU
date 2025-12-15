@@ -7,7 +7,10 @@ VAR
   _timer : ZAux.Timer;
   _rand : ZAux.RandomUniform(seed:=4, low:=1, high:=4);
   
+  _speed : LREAL := 100;
+  _path : Path1d;
   _newTargetZone, _currentTargetZone : INT;
+  _sortedRegions : ARRAY[0..2] OF ZApplication.IRegion;
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[IF NOT Busy THEN
@@ -23,7 +26,7 @@ IF OnStop() THEN
 END_IF
 
 IF OnHalt() THEN
-  ; // Halting := TRUE; // Uncomment to acknowledge that the sequence is halting
+  Halting := TRUE;
 END_IF
 
 REPEAT
@@ -38,9 +41,8 @@ REPEAT
         ;
       END_IF
 
-      // Await(obj1:=, nextStep:=HandlingStep.AutomaticEnd);
       _step.SetNext(HandlingStep.AutomaticWait);
-    
+      
     (* -------------------------------------------------------------------------------------------------------------------------------- *)
     HandlingStep.AutomaticWait:
     (* -------------------------------------------------------------------------------------------------------------------------------- *)
@@ -49,7 +51,11 @@ REPEAT
         _timer.WaitAsync(0.3);
       END_IF
 
-      IF _timer.Done
+      IF Halting
+      THEN
+        _step.SetNext(HandlingStep.AutomaticEnd);
+        
+      ELSIF _timer.Done
       THEN
       
         WHILE _newTargetZone = _currentTargetZone
@@ -58,16 +64,52 @@ REPEAT
         END_WHILE
         
         _currentTargetZone := _newTargetZone;
-        
-        _step.SetNext(HandlingStep.AutomaticMove);
-      END_IF
-      
-    (* -------------------------------------------------------------------------------------------------------------------------------- *)
-    HandlingStep.AutomaticMove:
+        _step.SetNext(HandlingStep.AutomaticReservePath);
+      END_IF      
+    
+    (* -------------------------------------------------------------------------------------------------------------------------------- *)    
+    HandlingStep.AutomaticReservePath:
     (* -------------------------------------------------------------------------------------------------------------------------------- *)
       IF _step.OnEntry()
       THEN
-        _axis.AxisX.MoveAbsoluteAsync(THIS^, position := TargetPosition(_currentTargetZone), speed := 300);
+        _path
+          .WithSortedRegions(ADR(_sortedRegions), 3)
+          .WithWidth(50)
+          .WithSafetyMargin(_speed * 0.01 * 10) // 10 cycles safety margin
+          .FromPosition(_axis.AxisX.ActualPosition)
+          .ToPosition(TargetPosition(_currentTargetZone))
+          .ReserveAsync(_parent);          
+      END_IF
+      
+      _path.Cyclic();
+
+      Await(_path, HandlingStep.AutomaticMoveThroughRegion); 
+    
+    (* -------------------------------------------------------------------------------------------------------------------------------- *)    
+    HandlingStep. AutomaticMoveThroughRegion:
+    (* -------------------------------------------------------------------------------------------------------------------------------- *)    
+      IF _step.OnEntry()
+      THEN
+        _axis.AxisX.MoveAbsoluteAsync(THIS^, _path.CurrentEdge, _speed);
+      END_IF
+      
+      IF _path.RegionsToPass = 0
+      THEN
+        _step.SetNext(HandlingStep.AutomaticMoveToEndPosition);
+      ELSIF _path.CheckAndLock(_axis.AxisX.ActualPosition)
+      THEN
+        _path.IncrementRegion(); 
+        _step.SetNext(HandlingStep.AutomaticMoveThroughRegion);
+      END_IF
+
+      Assert(_axis.AxisX);
+        
+    (* -------------------------------------------------------------------------------------------------------------------------------- *)
+    HandlingStep.AutomaticMoveToEndPosition:
+    (* -------------------------------------------------------------------------------------------------------------------------------- *)
+      IF _step.OnEntry()
+      THEN
+        _axis.AxisX.MoveAbsoluteAsync(THIS^, position := TargetPosition(_currentTargetZone), speed := _speed);
       END_IF
       
       Await(obj1:=_axis.AxisX, nextStep:=HandlingStep.AutomaticWait);

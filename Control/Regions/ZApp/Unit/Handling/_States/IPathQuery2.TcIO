@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <Itf Name="IPathQuery2" Id="{1d217fda-98d1-4876-be1b-73014b019343}">
+    <Declaration><![CDATA[INTERFACE IPathQuery2
+]]></Declaration>
+    <Method Name="ToPosition" Id="{3b023a69-9ad7-4bd7-a98f-3e1429237ba0}">
+      <Declaration><![CDATA[METHOD ToPosition : IPathQuery3
+VAR_INPUT
+  pos : LREAL;
+END_VAR
+]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

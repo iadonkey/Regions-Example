@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <Itf Name="IPathQuery" Id="{7187bdd6-0138-4330-8db8-f94906d71e8e}">
+    <Declaration><![CDATA[INTERFACE IPathQuery
+]]></Declaration>
+    <Method Name="FromPosition" Id="{ac0b68f7-18e7-4cda-ba71-b6ab060a5e13}">
+      <Declaration><![CDATA[METHOD FromPosition : IPathQuery2
+VAR_INPUT
+  pos : LREAL;
+END_VAR
+
+]]></Declaration>
+    </Method>
+    <Method Name="WithSafetyMargin" Id="{c861cf64-3ecc-4951-a1c4-ab55691fb9c7}">
+      <Declaration><![CDATA[METHOD WithSafetyMargin : IPathQuery
+VAR_INPUT
+  margin : LREAL;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="WithSortedRegions" Id="{bdd3aafa-5403-4f28-8b7c-182899de05d0}">
+      <Declaration><![CDATA[METHOD WithSortedRegions : IPathQuery
+VAR_INPUT
+  regions : POINTER TO ZApplication.Region;
+  regionCount : INT;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="WithWidth" Id="{b2668842-8d9d-449a-8edc-576e8c038880}">
+      <Declaration><![CDATA[METHOD WithWidth : IPathQuery
+VAR_INPUT
+  width : LREAL;
+END_VAR
+]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

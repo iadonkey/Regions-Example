@@ -10,7 +10,8 @@ VAR
   _fieldbus : REFERENCE TO HandlingFieldbus;
   _axis : REFERENCE TO HandlingAxis;
   _data : REFERENCE TO HandlingDataRef;
-  _unit : REFERENCE TO HandlingLinkedUnit;  
+  _unit : REFERENCE TO HandlingLinkedUnit;
+  _sharedContext : REFERENCE TO SharedContextContainer;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -33,7 +34,9 @@ _fieldbus REF= unit._equipment.Fieldbus;
 _axis REF= unit._equipment.Axis;
 _unit REF= unit._equipment.Unit;
 _data REF= unit._data;
-_loggerDiagnostics.SetLogger(unit._logger);]]></ST>
+_loggerDiagnostics.SetLogger(unit._logger);
+
+_sharedContext REF= ZModuleProgram.SharedContext;]]></ST>
       </Implementation>
     </Method>
     <Method Name="StepDecoded" Id="{d495fe02-7f76-4314-827c-c084fb249543}">

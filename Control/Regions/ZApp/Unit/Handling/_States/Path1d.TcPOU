@@ -1,0 +1,205 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="Path1d" Id="{d163563b-b0d8-0bc3-395b-6d8352dd5158}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK Path1d EXTENDS ZCore.Object IMPLEMENTS IPathQuery, IPathQuery2, IPathQuery3, ZCore.IUnmanagedObject
+VAR
+  _owner : REFERENCE TO Unit;
+  _fromPosition, _toPosition : LREAL;
+  _direction : INT;
+  _halfWidth, _safetyMargin : LREAL;
+  _regions : POINTER TO ZApplication.Region;
+  _regionEnd : INT;
+  
+  _maxRegions : DINT := 5;
+  _regionIndicesBuffer : ARRAY[0..5] OF INT;
+  _regionIndices : ZCore.RingBufferInt(_maxRegions, ADR(_regionIndicesBuffer));
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="CheckAndLock" Id="{d0ea5090-f040-4e8b-b4d9-204aa228834b}">
+      <Declaration><![CDATA[METHOD CheckAndLock : BOOL;
+VAR_INPUT
+  pos : LREAL;
+END_VAR
+VAR_INST
+  region : REFERENCE TO ZApplication.Region;
+  corner1WithMargin, corner2WithMargin : Vector4;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF _regionIndices.Empty
+THEN
+  CheckAndLock := TRUE;
+  RETURN;
+END_IF
+
+region REF= _regions[_regionIndices.ItemAt(0)];
+
+corner1WithMargin.X := pos - _halfWidth - _safetyMargin;
+corner2WithMargin.X := pos + _halfWidth + _safetyMargin;
+
+CheckAndLock := 
+  region.IntersectsAABB(corner1WithMargin, corner2WithMargin) AND_THEN
+  region.TryLock(_owner);]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="CurrentEdge" Id="{4c10ff27-4f30-4d44-a9f9-0de27afcd8bd}">
+      <Declaration><![CDATA[PROPERTY CurrentEdge : LREAL]]></Declaration>
+      <Get Name="Get" Id="{bed5760d-ad6a-434f-bc42-ef8e41897a33}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[IF _regionIndices.Empty
+THEN
+  CurrentEdge := _toPosition;
+  RETURN;
+END_IF
+
+IF _direction < 0
+THEN
+  CurrentEdge := _regions[_regionIndices.ItemAt(0)].Corner2.X + _halfWidth;
+ELSE
+  CurrentEdge := _regions[_regionIndices.ItemAt(0)].Corner1.X - _halfWidth;
+END_IF]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="Cyclic" Id="{2f8e18f1-7b9f-43ca-9807-35cbe99480a6}">
+      <Declaration><![CDATA[METHOD Cyclic
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT Busy
+THEN
+  RETURN;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FromPosition" Id="{c717db84-1e2a-0be7-378a-a2d2a7d60e6a}">
+      <Declaration><![CDATA[METHOD FromPosition : IPathQuery2
+VAR_INPUT
+  pos : LREAL;
+END_VAR
+
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_fromPosition := pos;
+
+FromPosition := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="IncrementRegion" Id="{39e24ae9-687e-4ea8-bac4-6000ef29c62e}">
+      <Declaration><![CDATA[METHOD IncrementRegion
+VAR_INST
+  intervalMin : LREAL;
+  intervalMax : LREAL;
+  i : INT;
+  
+  corner1, corner2 : Vector4;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT _regionIndices.Empty
+THEN
+  _regionIndices.PopFirstItem();
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="RegionsToPass" Id="{79686e52-b356-4ca7-a824-1164c5bff563}">
+      <Declaration><![CDATA[PROPERTY RegionsToPass : DINT]]></Declaration>
+      <Get Name="Get" Id="{747df01b-e3d2-4965-affb-874dc140a240}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[RegionsToPass := _regionIndices.Size;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="ReserveAsync" Id="{e607f347-fe2e-07c1-1baf-c06f8dc6270a}">
+      <Declaration><![CDATA[METHOD ReserveAsync
+VAR_INPUT
+  unit : REFERENCE TO Unit;
+END_VAR
+VAR_INST
+  intervalMin : LREAL;
+  intervalMax : LREAL;
+  i : INT;
+  
+  corner1, corner2 : Vector4;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[intervalMin := MIN(_fromPosition - _halfWidth, _toPosition - _halfWidth);
+intervalMax := MAX(_fromPosition + _halfWidth, _toPosition + _halfWidth);
+
+_owner REF= unit;
+_direction := SEL(_fromPosition < _toPosition, 1, -1);
+
+corner1.X := intervalMin;
+corner2.X := intervalMax;
+
+_regionIndices.Clear();
+FOR i := 0 TO _regionEnd BY _direction
+DO
+  IF _regions[i].IntersectsAABB(corner1, corner2)
+  THEN
+    _regionIndices.Append(i);
+  END_IF
+END_FOR
+
+SetBusy(TRUE);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ToPosition" Id="{96a0486b-dd4f-0cad-3260-b33f67f5e78b}">
+      <Declaration><![CDATA[METHOD ToPosition : IPathQuery3
+VAR_INPUT
+  pos : LREAL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_toPosition := pos;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="WithSafetyMargin" Id="{652e493c-1f38-430b-962f-8a16e35509de}">
+      <Declaration><![CDATA[METHOD WithSafetyMargin : IPathQuery
+VAR_INPUT
+  margin : LREAL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_safetyMargin := margin;
+
+WithSafetyMargin := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="WithSortedRegions" Id="{d968df69-3240-4dd9-ab3d-cb58fae1f925}">
+      <Declaration><![CDATA[METHOD WithSortedRegions : IPathQuery
+VAR_INPUT
+  regions : POINTER TO ZApplication.Region;
+  regionCount : INT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_regions := regions;
+_regionEnd := regionCount-1;
+
+WithSortedRegions := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="WithWidth" Id="{b0e59529-3f47-4d26-bdcf-c3f5c7e23a81}">
+      <Declaration><![CDATA[METHOD WithWidth : IPathQuery
+VAR_INPUT
+  width : LREAL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_halfWidth := width * 0.5;
+
+WithWidth := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>
