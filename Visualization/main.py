@@ -19,10 +19,11 @@ pygame.init()
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Multi Region Demo")
 clock = pygame.time.Clock()
+font = pygame.font.Font(None, 30)
 
 # --- Unit class ---
 class Unit:
-    def __init__(self, color, start_pos, axis, path_range, unit_speed, width=30, height=30):
+    def __init__(self, name, color, start_pos, axis, path_range, unit_speed, width=30, height=30):
         self.base_color = color
         self.color = color
         self.pos = list(start_pos)
@@ -32,14 +33,18 @@ class Unit:
         self.unit_speed = unit_speed
         self.width = width
         self.height = height
+        self.text_surface = font.render(name, True, (255,255,255))
 
     def update(self, x):
         self.pos[0] = x
 
     def draw(self, surface):
-        unit_rect = pygame.Rect(int(self.pos[0]), int(self.pos[1]), self.width, self.height)
+        unit_rect = pygame.Rect(int(self.pos[0] - self.width * 0.5), int(self.pos[1] - self.height * 0.5), self.width, self.height)
+        
         pygame.draw.rect(surface, self.color, unit_rect)
         pygame.draw.rect(surface, WHITE, unit_rect, 2)
+        surface.blit(self.text_surface, self.pos)
+        
 
 def check_collision(unit1, unit2):
     rect1 = pygame.Rect(unit1.pos[0], unit1.pos[1], unit1.width, unit1.height)
@@ -49,11 +54,11 @@ def check_collision(unit1, unit2):
 
 
 # --- Create 1 horizontal unit ---
-horizontal_unit1 = Unit(color=(218, 119, 109), start_pos=(0, 150), axis='x', path_range=(0, SCREEN_WIDTH), unit_speed=2,
+horizontal_unit1 = Unit("1", color=(218, 119, 109), start_pos=(0, 150), axis='x', path_range=(0, SCREEN_WIDTH), unit_speed=2,
                        width=40, height=40)
 
 # --- Create 2 horizontal unit ---
-horizontal_unit2 = Unit(color=(218, 119, 109), start_pos=(0, 230), axis='x', path_range=(0, SCREEN_WIDTH), unit_speed=2,
+horizontal_unit2 = Unit("2", color=(218, 119, 109), start_pos=(0, 230), axis='x', path_range=(0, SCREEN_WIDTH), unit_speed=2,
                        width=40, height=40)
 
 units = [horizontal_unit1] + [horizontal_unit2]
@@ -112,14 +117,13 @@ with pyads.Connection("127.0.0.1.1.1", 851, "127.0.0.1.1.1") as plc:
         draw_grid(screen)
         
         for i in range(1, 4):
-            print(f"ZGlobal.Com.SharedContext.Publish.Region{i}.Corner1.X")
+            color = (255, 0, 0) if plc.read_by_name(f"ZGlobal.Com.SharedContext.Publish.Region{i}.IsLocked", pyads.PLCTYPE_BOOL) else (0, 255, 0)
             draw_transparent_rect(screen,
                 plc.read_by_name(f"ZGlobal.Com.SharedContext.Publish.Region{i}.Corner1.X", pyads.PLCTYPE_LREAL),
                 100,
                 plc.read_by_name(f"ZGlobal.Com.SharedContext.Publish.Region{i}.Corner2.X", pyads.PLCTYPE_LREAL),
-                300,
-                                  
-                (0, 255, 0), 120)        
+                300,               
+                color, 120)        
 
         # Draw units
         for u in units:

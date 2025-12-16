@@ -7,12 +7,14 @@ VAR
   _fromPosition, _toPosition : LREAL;
   _direction : INT;
   _halfWidth, _safetyMargin : LREAL;
-  _regions : POINTER TO ZApplication.Region;
+  _regions : POINTER TO ZApplication.IRegion;
   _regionEnd : INT;
   
   _maxRegions : DINT := 5;
-  _regionIndicesBuffer : ARRAY[0..5] OF INT;
-  _regionIndices : ZCore.RingBufferInt(_maxRegions, ADR(_regionIndicesBuffer));
+  _regionIndicesBuffer1 : ARRAY[0..5] OF INT;
+  _regionIndicesBuffer2 : ARRAY[0..5] OF INT;  
+  _regionLockIndices : ZCore.RingBufferInt(_maxRegions, ADR(_regionIndicesBuffer1));
+  _regionUnlockIndices : ZCore.RingBufferInt(_maxRegions, ADR(_regionIndicesBuffer2));
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -24,25 +26,27 @@ VAR_INPUT
   pos : LREAL;
 END_VAR
 VAR_INST
-  region : REFERENCE TO ZApplication.Region;
+  i : DINT;
+  region : ZApplication.IRegion;
   corner1WithMargin, corner2WithMargin : Vector4;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF _regionIndices.Empty
+        <ST><![CDATA[IF _regionLockIndices.Empty
 THEN
   CheckAndLock := TRUE;
   RETURN;
 END_IF
 
-region REF= _regions[_regionIndices.ItemAt(0)];
-
-corner1WithMargin.X := pos - _halfWidth - _safetyMargin;
-corner2WithMargin.X := pos + _halfWidth + _safetyMargin;
-
+region := _regions[_regionLockIndices.ItemAt(0)];
 CheckAndLock := 
-  region.IntersectsAABB(corner1WithMargin, corner2WithMargin) AND_THEN
-  region.TryLock(_owner);]]></ST>
+  region.IntersectsIntervalX(pos - _halfWidth - _safetyMargin, pos + _halfWidth + _safetyMargin) AND_THEN
+  region.TryLock(_owner);
+  
+IF CheckAndLock
+THEN
+  _regionUnlockIndices.Append(_regionLockIndices.ItemAt(0));
+END_IF]]></ST>
       </Implementation>
     </Method>
     <Property Name="CurrentEdge" Id="{4c10ff27-4f30-4d44-a9f9-0de27afcd8bd}">
@@ -52,7 +56,7 @@ CheckAndLock :=
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[IF _regionIndices.Empty
+          <ST><![CDATA[IF _regionLockIndices.Empty
 THEN
   CurrentEdge := _toPosition;
   RETURN;
@@ -60,21 +64,80 @@ END_IF
 
 IF _direction < 0
 THEN
-  CurrentEdge := _regions[_regionIndices.ItemAt(0)].Corner2.X + _halfWidth;
+  CurrentEdge := _regions[_regionLockIndices.ItemAt(0)].Corner2.X + _halfWidth;
 ELSE
-  CurrentEdge := _regions[_regionIndices.ItemAt(0)].Corner1.X - _halfWidth;
+  CurrentEdge := _regions[_regionLockIndices.ItemAt(0)].Corner1.X - _halfWidth;
 END_IF]]></ST>
         </Implementation>
       </Get>
     </Property>
     <Method Name="Cyclic" Id="{2f8e18f1-7b9f-43ca-9807-35cbe99480a6}">
       <Declaration><![CDATA[METHOD Cyclic
-]]></Declaration>
+VAR_INST
+  i : DINT;
+  region : ZApplication.IRegion;
+  priority : INT;
+  priorityIndex : DINT;
+  waiting : BOOL;
+END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF NOT Busy
 THEN
   RETURN;
+END_IF
+
+IF _regionLockIndices.Empty
+THEN
+  SetBusy(FALSE);  
+  RETURN;
+END_IF
+
+priority := 10000;
+FOR i := 0 TO _regionLockIndices.Size - 1
+DO
+  region := _regions[_regionLockIndices.ItemAt(i)];
+  IF priority > region.Priority
+  THEN
+    priorityIndex := i;
+    priority := region.Priority;
+  END_IF
+END_FOR
+
+waiting := FALSE;
+FOR i := priorityIndex TO _regionLockIndices.Size - 1
+DO
+  region := _regions[_regionLockIndices.ItemAt(i)];
+  IF NOT region.TryLock(_owner)
+  THEN
+    waiting := TRUE;
+  END_IF
+END_FOR
+
+SetBusy(waiting);
+
+// We can't move so free up resources
+IF Busy
+THEN
+  FOR i := 0 TO _regionLockIndices.Size - 1
+  DO
+    region := _regions[_regionLockIndices.ItemAt(i)];
+    region.Unlock(_owner);
+  END_FOR
 END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_Init" Id="{b6ede0be-ab8f-47f6-bb7f-2b9119232049}">
+      <Declaration><![CDATA[//FB_Init is always available implicitly and it is used primarily for initialization.
+//The return value is not evaluated. For a specific influence, you can also declare the
+//methods explicitly and provide additional code there with the standard initialization
+//code. You can evaluate the return value.
+METHOD FB_Init: BOOL
+VAR_INPUT
+    bInitRetains: BOOL; // TRUE: the retain variables are initialized (reset warm / reset cold)
+    bInCopyCode: BOOL;  // TRUE: the instance will be copied to the copy code afterward (online change)   
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[SetIdle();]]></ST>
       </Implementation>
     </Method>
     <Method Name="FromPosition" Id="{c717db84-1e2a-0be7-378a-a2d2a7d60e6a}">
@@ -101,9 +164,9 @@ VAR_INST
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF NOT _regionIndices.Empty
+        <ST><![CDATA[IF NOT _regionLockIndices.Empty
 THEN
-  _regionIndices.PopFirstItem();
+  _regionLockIndices.PopFirstItem();
 END_IF]]></ST>
       </Implementation>
     </Method>
@@ -114,7 +177,7 @@ END_IF]]></ST>
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[RegionsToPass := _regionIndices.Size;]]></ST>
+          <ST><![CDATA[RegionsToPass := _regionLockIndices.Size;]]></ST>
         </Implementation>
       </Get>
     </Property>
@@ -126,9 +189,7 @@ END_VAR
 VAR_INST
   intervalMin : LREAL;
   intervalMax : LREAL;
-  i : INT;
-  
-  corner1, corner2 : Vector4;
+  i, start, end : INT;
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -136,17 +197,25 @@ END_VAR
 intervalMax := MAX(_fromPosition + _halfWidth, _toPosition + _halfWidth);
 
 _owner REF= unit;
-_direction := SEL(_fromPosition < _toPosition, 1, -1);
+_direction := SEL(_fromPosition < _toPosition, -1, 1);
 
-corner1.X := intervalMin;
-corner2.X := intervalMax;
+_regionLockIndices.Clear();
+_regionUnlockIndices.Clear();
 
-_regionIndices.Clear();
-FOR i := 0 TO _regionEnd BY _direction
+IF _direction < 0
+THEN
+  start := _regionEnd;
+  end := 0;
+ELSE
+  start := 0;
+  end := _regionEnd;
+END_IF
+
+FOR i := start TO end BY _direction
 DO
-  IF _regions[i].IntersectsAABB(corner1, corner2)
+  IF _regions[i].IntersectsIntervalX(intervalMin, intervalMax)
   THEN
-    _regionIndices.Append(i);
+    _regionLockIndices.Append(i);
   END_IF
 END_FOR
 
@@ -160,7 +229,39 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[_toPosition := pos;]]></ST>
+        <ST><![CDATA[_toPosition := pos;
+
+ToPosition := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="UnlockPassedRegions" Id="{ce34f11a-e22e-422e-8b3c-8bccb88f81dd}">
+      <Declaration><![CDATA[METHOD UnlockPassedRegions : IError
+VAR_INPUT
+  pos : LREAL;
+END_VAR
+VAR_INST
+  i : DINT;
+  region : ZApplication.IRegion;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT _regionUnlockIndices.Empty
+THEN
+  region := _regions[_regionUnlockIndices.ItemAt(0)];
+  WHILE (_direction < 0 AND_THEN pos + _halfWidth < region.Corner1.X) OR_ELSE
+        (_direction > 0 AND_THEN pos - _halfWidth > region.Corner2.X)
+  DO
+    region.Unlock(_owner);
+    _regionUnlockIndices.PopFirstItem();
+    
+    IF _regionUnlockIndices.Empty
+    THEN
+      EXIT;
+    END_IF
+    
+    region := _regions[_regionUnlockIndices.ItemAt(0)];
+  END_WHILE
+END_IF]]></ST>
       </Implementation>
     </Method>
     <Method Name="WithSafetyMargin" Id="{652e493c-1f38-430b-962f-8a16e35509de}">
@@ -178,7 +279,7 @@ WithSafetyMargin := THIS^;]]></ST>
     <Method Name="WithSortedRegions" Id="{d968df69-3240-4dd9-ab3d-cb58fae1f925}">
       <Declaration><![CDATA[METHOD WithSortedRegions : IPathQuery
 VAR_INPUT
-  regions : POINTER TO ZApplication.Region;
+  regions : POINTER TO ZApplication.IRegion;
   regionCount : INT;
 END_VAR
 ]]></Declaration>

@@ -18,7 +18,9 @@ END_VAR]]></Declaration>
 END_IF
 
 IF OnStart(_step) THEN
-  ; // init custom sequence variables here ...
+  _sortedRegions[0] := _sharedContext.Region1;
+  _sortedRegions[1] := _sharedContext.Region2;
+  _sortedRegions[2] := _sharedContext.Region3;  
 END_IF
 
 IF OnStop() THEN
@@ -75,15 +77,25 @@ REPEAT
         _path
           .WithSortedRegions(ADR(_sortedRegions), 3)
           .WithWidth(50)
-          .WithSafetyMargin(_speed * 0.01 * 10) // 10 cycles safety margin
+          .WithSafetyMargin(15) // 10 cycles safety margin
           .FromPosition(_axis.AxisX.ActualPosition)
           .ToPosition(TargetPosition(_currentTargetZone))
           .ReserveAsync(_parent);          
       END_IF
       
+      _step.SetNext(HandlingStep. AutomaticMoveToFirstEdge);
+      
+    (* -------------------------------------------------------------------------------------------------------------------------------- *)    
+    HandlingStep. AutomaticMoveToFirstEdge:
+    (* -------------------------------------------------------------------------------------------------------------------------------- *)    
+      IF _step.OnEntry()
+      THEN
+        _axis.AxisX.MoveAbsoluteAsync(THIS^, _path.CurrentEdge, _speed);
+      END_IF
+      
       _path.Cyclic();
-
-      Await(_path, HandlingStep.AutomaticMoveThroughRegion); 
+      Assert(_axis.AxisX);
+      Await(_path, HandlingStep.AutomaticMoveThroughRegion);   
     
     (* -------------------------------------------------------------------------------------------------------------------------------- *)    
     HandlingStep. AutomaticMoveThroughRegion:
@@ -102,6 +114,7 @@ REPEAT
         _step.SetNext(HandlingStep.AutomaticMoveThroughRegion);
       END_IF
 
+      _path.UnlockPassedRegions(_axis.AxisX.ActualPosition);
       Assert(_axis.AxisX);
         
     (* -------------------------------------------------------------------------------------------------------------------------------- *)
@@ -112,7 +125,11 @@ REPEAT
         _axis.AxisX.MoveAbsoluteAsync(THIS^, position := TargetPosition(_currentTargetZone), speed := _speed);
       END_IF
       
-      Await(obj1:=_axis.AxisX, nextStep:=HandlingStep.AutomaticWait);
+      _path.UnlockPassedRegions(_axis.AxisX.ActualPosition);
+      IF Await(obj1:=_axis.AxisX, nextStep:=HandlingStep.AutomaticWait)
+      THEN
+        _path.UnlockPassedRegions(_axis.AxisX.ActualPosition);
+      END_IF
     
     (* -------------------------------------------------------------------------------------------------------------------------------- *)
     HandlingStep.AutomaticEnd:

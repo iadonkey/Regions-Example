@@ -18,6 +18,7 @@ TYPE HandlingStep :
   ,AutomaticBegin
   ,AutomaticWait
   ,AutomaticReservePath
+  ,AutomaticMoveToFirstEdge
   ,AutomaticMoveThroughRegion
   ,AutomaticMoveToEndPosition
   ,AutomaticMove

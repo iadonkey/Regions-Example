@@ -21,7 +21,7 @@ END_VAR
     <Method Name="WithSortedRegions" Id="{bdd3aafa-5403-4f28-8b7c-182899de05d0}">
       <Declaration><![CDATA[METHOD WithSortedRegions : IPathQuery
 VAR_INPUT
-  regions : POINTER TO ZApplication.Region;
+  regions : POINTER TO ZApplication.IRegion;
   regionCount : INT;
 END_VAR]]></Declaration>
     </Method>

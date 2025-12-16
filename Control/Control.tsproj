@@ -995,7 +995,7 @@ External Setpoint Generation:
 		</System>
 		<Plc>
 			<Project GUID="{A155DE0E-B04C-49D7-A15D-CA32D54F485E}" Name="Regions" PrjFilePath="Regions\Regions.plcproj" TmcFilePath="Regions\Regions.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e" SymbolicMapping="true">
-				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcHash="{9C41A59D-0239-FFB2-8D8A-5186A923A4F8}">
+				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcHash="{87121B11-D343-0805-6F11-41EAEC3A992A}" TmcPath="Regions\Regions.tmc">
 					<Name>Regions Instance</Name>
 					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
 					<Vars VarGrpType="2" AreaNo="1">
