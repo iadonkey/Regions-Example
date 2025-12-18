@@ -20,7 +20,14 @@ END_VAR
 
 {attribute 'ZId' := '19816701-366b-4384-b6ea-ebe33b677430'}]]></Declaration>
     <Implementation>
-      <ST><![CDATA[IF _observeTimer.Done THEN
+      <ST><![CDATA[IF _statemachine.State() = ZApplication.UnitStateMachineState.Automatic
+THEN
+  _com.Publish.TargetPosition := _automatic.CurrentTargetPosition;
+ELSE
+  _com.Publish.TargetPosition := _equipment.Axis.AxisX.ActualPosition;
+END_IF
+
+IF _observeTimer.Done THEN
   _observeTimer.WaitAsync(0.1);
   
   // monitor _com for requested actions (e.g. start homing, start automatic mode, ...)

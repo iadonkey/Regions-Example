@@ -48,6 +48,36 @@ VAR_INPUT
   {attribute 'ZId' := '686d4019-fd8f-49d1-bfb7-e2c5e589b8a3'}
 {END_IF}
 {endregion}
+{region "Handling3"}
+{undefine RunInSeparateProgram}
+{IF NOT (defined (Handling3_disabled)) AND NOT (defined (RunInSeparateProgram))}
+  Handling3 : HandlingUnit(displayName := 'Handling3', // name of the unit (for logging)
+    parent:= App,
+    configdata:= ZGlobal.Data.Config.Handling3,
+    machinedata := ZGlobal.Data.Machine.Handling3,
+    calibrationdata := ZGlobal.Data.Calibration.Handling3,
+    com := ZGlobal.Com.Unit.Handling3,
+    logger := Logger,
+    alarming:= Alarming);
+  {attribute 'section' := '__ZwPlcUnitProgramDeclaration__'}
+  {attribute 'ZId' := '12b42cce-14ce-45ff-90cd-901aacabced4'}
+{END_IF}
+{endregion}
+{region "Handling4"}
+{undefine RunInSeparateProgram}
+{IF NOT (defined (Handling4_disabled)) AND NOT (defined (RunInSeparateProgram))}
+  Handling4 : HandlingUnit(displayName := 'Handling4', // name of the unit (for logging)
+    parent:= App,
+    configdata:= ZGlobal.Data.Config.Handling4,
+    machinedata := ZGlobal.Data.Machine.Handling4,
+    calibrationdata := ZGlobal.Data.Calibration.Handling4,
+    com := ZGlobal.Com.Unit.Handling4,
+    logger := Logger,
+    alarming:= Alarming);
+  {attribute 'section' := '__ZwPlcUnitProgramDeclaration__'}
+  {attribute 'ZId' := '0a2dd986-966c-44be-a2b7-029bd083f361'}
+{END_IF}
+{endregion}
 {attribute '__ZwPlcUnitProgramDeclaration__'} // Do not remove this attribute! It is used for code generation.
 END_VAR
 ]]></Declaration>

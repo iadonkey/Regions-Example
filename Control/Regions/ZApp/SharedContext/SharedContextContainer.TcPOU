@@ -3,9 +3,15 @@
   <POU Name="SharedContextContainer" Id="{ba87ad56-729e-424f-840d-d1d6dc971b67}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK SharedContextContainer EXTENDS ZCore.ObjectContainer
 VAR_INPUT
-  Region1 : ZApplication.Region('Region-1', priority:=1);
-  Region2 : ZApplication.Region('Region-2', priority:=2);
-  Region3 : ZApplication.Region('Region-3', priority:=3);  
+  Region1 : ZApplication.Region('Region-1', priority:=13);
+  Region2 : ZApplication.Region('Region-2', priority:=12);
+  Region3 : ZApplication.Region('Region-3', priority:=11);  
+  Region4 : ZApplication.Region('Region-4', priority:=4);  
+  Region5 : ZApplication.Region('Region-5', priority:=5);  
+  Region6 : ZApplication.Region('Region-6', priority:=6);  
+  Region7 : ZApplication.Region('Region-7', priority:=7);  
+
+  
 END_VAR
 VAR
   {attribute 'hide'}
@@ -40,6 +46,34 @@ v2.X := 355;
 Region3.SetBoundingBox(v1, v2);
 Region3.SetLogger(_logger);
 _regionbridge.AddStaticRegion(Region3, _com.Publish.Region3, _com.Subscribe.Region3);
+
+v1.X := 360;
+v2.X := 410;
+Region4.SetBoundingBox(v1, v2);
+Region4.SetLogger(_logger);
+_regionbridge.AddStaticRegion(Region4, _com.Publish.Region4, _com.Subscribe.Region4);
+
+
+v1.X := 480;
+v2.X := 530;
+Region5.SetBoundingBox(v1, v2);
+Region5.SetLogger(_logger);
+_regionbridge.AddStaticRegion(Region5, _com.Publish.Region5, _com.Subscribe.Region5);
+
+
+v1.X := 650;
+v2.X := 700;
+Region6.SetBoundingBox(v1, v2);
+Region6.SetLogger(_logger);
+_regionbridge.AddStaticRegion(Region6, _com.Publish.Region6, _com.Subscribe.Region6);
+
+
+v1.X := 705;
+v2.X := 755;
+Region7.SetBoundingBox(v1, v2);
+Region7.SetLogger(_logger);
+_regionbridge.AddStaticRegion(Region7, _com.Publish.Region7, _com.Subscribe.Region7);
+
 
 _isInitialized := TRUE;]]></ST>
     </Implementation>

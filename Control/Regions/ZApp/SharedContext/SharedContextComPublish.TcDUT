@@ -6,6 +6,10 @@ STRUCT
   Region1 : ZApplication.RegionComPublish;
   Region2 : ZApplication.RegionComPublish;
   Region3 : ZApplication.RegionComPublish;
+  Region4 : ZApplication.RegionComPublish;
+  Region5 : ZApplication.RegionComPublish;
+  Region6 : ZApplication.RegionComPublish;
+  Region7 : ZApplication.RegionComPublish;
 END_STRUCT
 END_TYPE
 ]]></Declaration>

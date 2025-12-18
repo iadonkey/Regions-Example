@@ -22,6 +22,48 @@
       <InternalElement Name="Control" ID="f583d043-c61a-4e2f-8d29-d61acbbaad18" RefBaseSystemUnitPath="ZObjectLib/Common/ZPLC">
         <InternalElement Name="Handling" ID="19816701-366b-4384-b6ea-ebe33b677430" RefBaseSystemUnitPath="ZObjectLib/Unit/ZUnit">
           <InternalElement Name="Instance" ID="3da60e7c-783c-4ac2-88e6-9831f43fd5d9">
+            <InternalElement Name="Handling4" ID="0a2dd986-966c-44be-a2b7-029bd083f361" RefBaseSystemUnitPath="ZObjectLib/Unit/ZUnitInstance">
+              <Attribute Name="DisplayName" AttributeDataType="xs:string">
+                <Value>Handling4</Value>
+              </Attribute>
+              <Attribute Name="Unit" AttributeDataType="xs:string" RefAttributeType="ZAttributeTypeLib/ZObjectRelation">
+                <Value>ZObjectLib/Unit/ZUnit</Value>
+              </Attribute>
+              <Attribute Name="RunInSeparateProgram" AttributeDataType="xs:boolean">
+                <Description>Shall the unit run in its own program (task)</Description>
+                <DefaultValue>false</DefaultValue>
+                <Value>false</Value>
+              </Attribute>
+              <Attribute Name="IsDisabled" AttributeDataType="xs:boolean">
+                <DefaultValue>false</DefaultValue>
+                <Value>false</Value>
+              </Attribute>
+              <Attribute Name="Simulated" AttributeDataType="xs:string">
+                <Value>true</Value>
+              </Attribute>
+              <RoleRequirements RefBaseRoleClassPath="ZRoleClassLib/ZObject" />
+            </InternalElement>
+            <InternalElement Name="Handling3" ID="12b42cce-14ce-45ff-90cd-901aacabced4" RefBaseSystemUnitPath="ZObjectLib/Unit/ZUnitInstance">
+              <Attribute Name="DisplayName" AttributeDataType="xs:string">
+                <Value>Handling3</Value>
+              </Attribute>
+              <Attribute Name="Unit" AttributeDataType="xs:string" RefAttributeType="ZAttributeTypeLib/ZObjectRelation">
+                <Value>ZObjectLib/Unit/ZUnit</Value>
+              </Attribute>
+              <Attribute Name="RunInSeparateProgram" AttributeDataType="xs:boolean">
+                <Description>Shall the unit run in its own program (task)</Description>
+                <DefaultValue>false</DefaultValue>
+                <Value>false</Value>
+              </Attribute>
+              <Attribute Name="IsDisabled" AttributeDataType="xs:boolean">
+                <DefaultValue>false</DefaultValue>
+                <Value>false</Value>
+              </Attribute>
+              <Attribute Name="Simulated" AttributeDataType="xs:string">
+                <Value>true</Value>
+              </Attribute>
+              <RoleRequirements RefBaseRoleClassPath="ZRoleClassLib/ZObject" />
+            </InternalElement>
             <InternalElement Name="Handling2" ID="686d4019-fd8f-49d1-bfb7-e2c5e589b8a3" RefBaseSystemUnitPath="ZObjectLib/Unit/ZUnitInstance">
               <Attribute Name="DisplayName" AttributeDataType="xs:string">
                 <Value>Handling2</Value>

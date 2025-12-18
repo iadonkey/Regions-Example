@@ -4,7 +4,7 @@ import random
 import math
 
 # --- Configuration ---
-SCREEN_WIDTH = 800
+SCREEN_WIDTH = 850
 SCREEN_HEIGHT = 400
 FPS = 60
 
@@ -43,7 +43,9 @@ class Unit:
         
         pygame.draw.rect(surface, self.color, unit_rect)
         pygame.draw.rect(surface, WHITE, unit_rect, 2)
-        surface.blit(self.text_surface, self.pos)
+        
+        text_rect = self.text_surface.get_rect(center=self.pos)
+        surface.blit(self.text_surface, text_rect)
         
 
 def check_collision(unit1, unit2):
@@ -53,22 +55,12 @@ def check_collision(unit1, unit2):
 
 
 
-# --- Create 1 horizontal unit ---
-horizontal_unit1 = Unit("1", color=(218, 119, 109), start_pos=(0, 150), axis='x', path_range=(0, SCREEN_WIDTH), unit_speed=2,
-                       width=40, height=40)
-
-# --- Create 2 horizontal unit ---
-horizontal_unit2 = Unit("2", color=(218, 119, 109), start_pos=(0, 230), axis='x', path_range=(0, SCREEN_WIDTH), unit_speed=2,
-                       width=40, height=40)
-
-units = [horizontal_unit1] + [horizontal_unit2]
-
-# --- Draw grid background ---
-def draw_grid(surface, spacing=100):
-    for x in range(0, SCREEN_WIDTH, spacing):
-        pygame.draw.line(surface, GRAY, (x,0), (x,SCREEN_HEIGHT))
-    for y in range(0, SCREEN_HEIGHT, spacing):
-        pygame.draw.line(surface, GRAY, (0,y), (SCREEN_WIDTH,y))
+units = []
+for i in range(4):
+    unit = Unit(f"{i+1}", color=(218, 119, 109), start_pos=(0, 130 + (45*i)), 
+                       axis='x', path_range=(0, SCREEN_WIDTH), unit_speed=2,
+                       width=50, height=40)
+    units.append(unit)
 
 def draw_transparent_rect(surface, p1x, p1y, p2x, p2y, color, alpha):
     """
@@ -98,32 +90,36 @@ with pyads.Connection("127.0.0.1.1.1", 851, "127.0.0.1.1.1") as plc:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-
-        horizontal_unit1.update(plc.read_by_name(f"ZGlobal.Com.Unit.Handling1.Publish.Equipment.AxisX.Base.ActualPosition", pyads.PLCTYPE_LREAL))
-        horizontal_unit2.update(plc.read_by_name(f"ZGlobal.Com.Unit.Handling2.Publish.Equipment.AxisX.Base.ActualPosition", pyads.PLCTYPE_LREAL))
-                
-        # collision checks
-        for i in range(len(units)):
+    
+        for i, unit in enumerate(units):
+            unit.update(plc.read_by_name(f"ZGlobal.Com.Unit.Handling{i+1}.Publish.Equipment.AxisX.Base.ActualPosition", pyads.PLCTYPE_LREAL))
+            
             for j in range(i+1, len(units)):
                 if check_collision(units[i], units[j]):
                     units[i].color = COLLISION_COLOR
                     units[j].color = COLLISION_COLOR
                 else:
                     units[i].color = units[i].base_color
-                    units[j].color = units[j].base_color    
+                    units[j].color = units[j].base_color
+       
 
         # Draw everything
         screen.fill(BACKGROUND_COLOR)
-        draw_grid(screen)
         
-        for i in range(1, 4):
+        for i in range(1, 8):
             color = (255, 0, 0) if plc.read_by_name(f"ZGlobal.Com.SharedContext.Publish.Region{i}.IsLocked", pyads.PLCTYPE_BOOL) else (0, 255, 0)
             draw_transparent_rect(screen,
                 plc.read_by_name(f"ZGlobal.Com.SharedContext.Publish.Region{i}.Corner1.X", pyads.PLCTYPE_LREAL),
                 100,
                 plc.read_by_name(f"ZGlobal.Com.SharedContext.Publish.Region{i}.Corner2.X", pyads.PLCTYPE_LREAL),
                 300,               
-                color, 120)        
+                color, 120)
+            
+        for i in range(len(units)):                   
+            target_position = plc.read_by_name(f"ZGlobal.Com.Unit.Handling{i+1}.Publish.TargetPosition", pyads.PLCTYPE_LREAL)
+            pygame.draw.line(screen, GRAY, units[i].pos, (target_position, units[i].pos[1]), 2)            
+            
+            
 
         # Draw units
         for u in units:

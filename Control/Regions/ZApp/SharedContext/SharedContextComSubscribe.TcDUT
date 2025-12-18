@@ -6,6 +6,10 @@ STRUCT
   Region1 : ZApplication.RegionComSubscribe;
   Region2 : ZApplication.RegionComSubscribe;
   Region3 : ZApplication.RegionComSubscribe;
+  Region4 : ZApplication.RegionComSubscribe;
+  Region5 : ZApplication.RegionComSubscribe;
+  Region6 : ZApplication.RegionComSubscribe;
+  Region7 : ZApplication.RegionComSubscribe;
 END_STRUCT
 END_TYPE
 ]]></Declaration>

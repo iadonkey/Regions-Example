@@ -2,15 +2,19 @@
 <TcPlcObject Version="1.1.0.1">
   <POU Name="HandlingSequenceAutomatic" Id="{7b948839-0d31-4b50-8d53-d7d203650277}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK HandlingSequenceAutomatic EXTENDS HandlingSequence IMPLEMENTS ZCore.ISequence
+VAR_OUTPUT
+  CurrentTargetPosition : LREAL;
+END_VAR
 VAR
   _step : ZCore.Step(HandlingStep.AutomaticBegin, HandlingStep.AutomaticEnd);
   _timer : ZAux.Timer;
-  _rand : ZAux.RandomUniform(seed:=4, low:=1, high:=4);
-  
   _speed : LREAL := 100;
   _path : Path1d;
   _newTargetZone, _currentTargetZone : INT;
-  _sortedRegions : ARRAY[0..2] OF ZApplication.IRegion;
+  _sortedRegions : ARRAY[0..6] OF ZApplication.IRegion;
+END_VAR
+VAR_STAT
+  _rand : ZAux.RandomUniform(seed:=4, low:=1, high:=6);
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[IF NOT Busy THEN
@@ -21,6 +25,10 @@ IF OnStart(_step) THEN
   _sortedRegions[0] := _sharedContext.Region1;
   _sortedRegions[1] := _sharedContext.Region2;
   _sortedRegions[2] := _sharedContext.Region3;  
+  _sortedRegions[3] := _sharedContext.Region4;  
+  _sortedRegions[4] := _sharedContext.Region5;  
+  _sortedRegions[5] := _sharedContext.Region6;  
+  _sortedRegions[6] := _sharedContext.Region7;  
 END_IF
 
 IF OnStop() THEN
@@ -62,10 +70,11 @@ REPEAT
       
         WHILE _newTargetZone = _currentTargetZone
         DO
-          _newTargetZone := LIMIT(1, LREAL_TO_INT(ZPlatform.Floor(_rand.Next())) , 3); 
+          _newTargetZone := LIMIT(1, LREAL_TO_INT(ZPlatform.Floor(_rand.Next())) , 5); 
         END_WHILE
         
         _currentTargetZone := _newTargetZone;
+        CurrentTargetPosition := TargetPosition(_currentTargetZone);
         _step.SetNext(HandlingStep.AutomaticReservePath);
       END_IF      
     
@@ -75,7 +84,7 @@ REPEAT
       IF _step.OnEntry()
       THEN
         _path
-          .WithSortedRegions(ADR(_sortedRegions), 3)
+          .WithSortedRegions(ADR(_sortedRegions), 7)
           .WithWidth(50)
           .WithSafetyMargin(15) // 10 cycles safety margin
           .FromPosition(_axis.AxisX.ActualPosition)
@@ -152,7 +161,9 @@ END_VAR
 OF
   1: TargetPosition := 50;
   2: TargetPosition := 200;
-  3: TargetPosition := 400;  
+  3: TargetPosition := 445;  
+  4: TargetPosition := 600;  
+  5: TargetPosition := 790;  
 END_CASE]]></ST>
       </Implementation>
     </Method>

@@ -42,6 +42,36 @@ VAR
   {attribute 'ZId' := '686d4019-fd8f-49d1-bfb7-e2c5e589b8a3'}
 {END_IF}
 {endregion}
+{region "Handling3"}
+{undefine RunInSeparateProgram}
+{IF NOT (defined (Handling3_disabled)) AND (defined (RunInSeparateProgram))}
+  Handling3 : HandlingUnit(displayName := 'Handling3', // name of the unit (for logging)
+    parent:= 0,
+    configdata := ZGlobal.Data.Config.Handling3,
+    machinedata := ZGlobal.Data.Machine.Handling3,
+    calibrationdata := ZGlobal.Data.Calibration.Handling3,
+    com := ZGlobal.Com.Unit.Handling3,
+    logger := Logger,
+    alarming:= Alarming);
+  {attribute 'section' := '__ZwPlcUnitProgramDeclaration__'}
+  {attribute 'ZId' := '12b42cce-14ce-45ff-90cd-901aacabced4'}
+{END_IF}
+{endregion}
+{region "Handling4"}
+{undefine RunInSeparateProgram}
+{IF NOT (defined (Handling4_disabled)) AND (defined (RunInSeparateProgram))}
+  Handling4 : HandlingUnit(displayName := 'Handling4', // name of the unit (for logging)
+    parent:= 0,
+    configdata := ZGlobal.Data.Config.Handling4,
+    machinedata := ZGlobal.Data.Machine.Handling4,
+    calibrationdata := ZGlobal.Data.Calibration.Handling4,
+    com := ZGlobal.Com.Unit.Handling4,
+    logger := Logger,
+    alarming:= Alarming);
+  {attribute 'section' := '__ZwPlcUnitProgramDeclaration__'}
+  {attribute 'ZId' := '0a2dd986-966c-44be-a2b7-029bd083f361'}
+{END_IF}
+{endregion}
 {attribute '__ZwPlcUnitProgramDeclaration__'} // Do not remove this attribute! It is used for code generation.
 END_VAR
 ]]></Declaration>
@@ -62,6 +92,22 @@ END_VAR
   Handling2.Cyclic();
   {attribute 'section' := '__ZwPlcUnitProgramImplementation__'}
   {attribute 'ZId' := '686d4019-fd8f-49d1-bfb7-e2c5e589b8a3'}
+{END_IF}
+{endregion}
+{region "Handling3"}
+{undefine RunInSeparateProgram}
+{IF NOT (defined (Handling3_disabled)) AND (defined (RunInSeparateProgram))}
+  Handling3.Cyclic();
+  {attribute 'section' := '__ZwPlcUnitProgramImplementation__'}
+  {attribute 'ZId' := '12b42cce-14ce-45ff-90cd-901aacabced4'}
+{END_IF}
+{endregion}
+{region "Handling4"}
+{undefine RunInSeparateProgram}
+{IF NOT (defined (Handling4_disabled)) AND (defined (RunInSeparateProgram))}
+  Handling4.Cyclic();
+  {attribute 'section' := '__ZwPlcUnitProgramImplementation__'}
+  {attribute 'ZId' := '0a2dd986-966c-44be-a2b7-029bd083f361'}
 {END_IF}
 {endregion}
 {attribute '__ZwPlcUnitProgramImplementation__'} // Do not remove this attribute! It is used for code generation.

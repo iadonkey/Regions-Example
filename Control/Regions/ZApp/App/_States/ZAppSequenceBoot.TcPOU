@@ -87,6 +87,26 @@ UNTIL _step.IsNotRepeatable() OR_ELSE NOT Busy END_REPEAT]]></ST>
   {attribute 'ZId' := '686d4019-fd8f-49d1-bfb7-e2c5e589b8a3'}
 {endregion}
 
+{region "Handling3"}
+  {IF NOT (defined (Handling3_disabled))}
+  ZGlobal.Data.Config.Handling3.Simulated := TRUE;
+  {region "UserInitCode"}
+  // put your individual init code for this unit here
+  {endregion}
+  {END_IF}
+  {attribute 'ZId' := '12b42cce-14ce-45ff-90cd-901aacabced4'}
+{endregion}
+
+{region "Handling4"}
+  {IF NOT (defined (Handling4_disabled))}
+  ZGlobal.Data.Config.Handling4.Simulated := TRUE;
+  {region "UserInitCode"}
+  // put your individual init code for this unit here
+  {endregion}
+  {END_IF}
+  {attribute 'ZId' := '0a2dd986-966c-44be-a2b7-029bd083f361'}
+{endregion}
+
 {attribute '__ZwPlcUnitLoadDefaultConfigData__'} // Do not remove this attribute! It is used for code generation.
 ]]></ST>
       </Implementation>
